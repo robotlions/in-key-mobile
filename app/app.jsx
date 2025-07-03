@@ -8,12 +8,15 @@ import { ThemedView } from "@/components/ThemedView";
 
 import { intervalSteps, intToKey, intToScale, keyArray, scaleArray } from "../data/ScaleObjects";
 
+
+
 export default function App() {
   const [currentKey, setCurrentKey] = useState(1);
   const [active, setActive] = useState(1);
   const [activeScale, setActiveScale] = useState(1);
   const [scaleDegree, setScaleDegree] = useState(1);
   let currentScaleArray = [];
+
 
   function convertKey(interval) {
     let x = currentKey + interval;
@@ -104,10 +107,10 @@ export default function App() {
   let currentYear = currentDate.getFullYear();
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
+      headerBackgroundColor={{ light: "#ffffff", dark: "#000000" }}
       headerImage={
         <Image
-          source={require("@/assets/images/partial-react-logo.png")}
+          source={require("@/assets/images/inKeyPastel1.jpg")}
           style={styles.reactLogo}
         />
       }
@@ -162,10 +165,12 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   reactLogo: {
-    height: 178,
-    width: 290,
+    height: 200,
+    width: 600,
     bottom: 0,
     left: 0,
     position: "absolute",
   },
+
+ 
 });
