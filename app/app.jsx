@@ -1,6 +1,6 @@
 import { Image } from "expo-image";
 import { useState } from "react";
-import { Dimensions, Pressable, StyleSheet, Text, useWindowDimensions } from "react-native";
+import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
@@ -17,7 +17,6 @@ export default function App() {
   const [scaleDegree, setScaleDegree] = useState(1);
   let currentScaleArray = [];
 
-  const scaledWidth = useWindowDimensions();
   const intervalWidth = Dimensions.get("window").width/8
 
 
@@ -119,15 +118,13 @@ export default function App() {
         />
       }
     >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">In Key</ThemedText>
-      </ThemedView>
+     
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Musical scale finder</ThemedText>
+        <ThemedText type="subtitle">Tonic Root</ThemedText>
       </ThemedView>
 
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">
+        <View style={{flex:1, flexDirection:"row", justifyContent:"space-between"}}>
           {keyArray.map((item) => (
             <KeyButton
               isActive={active === item.idNo}
@@ -136,11 +133,15 @@ export default function App() {
               key={item.idNo}
             />
           ))}
-        </ThemedText>
+        </View>
+      </ThemedView>
+
+       <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Mode</ThemedText>
       </ThemedView>
 
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">
+         <View style={{flex:1, flexDirection:"row", justifyContent:"space-between"}}>
           {scaleArray.map((item) => (
             <ScaleButton
               isActiveScale={activeScale === item.idNo}
@@ -150,7 +151,7 @@ export default function App() {
               key={item.idNo}
             />
           ))}
-        </ThemedText>
+        </View>
       </ThemedView>
 
       <ThemedView style={styles.stepContainer}><ThemedText type="subtitle">Chords in {intToKey[currentKey]} {intToScale[activeScale]}</ThemedText></ThemedView>
@@ -204,9 +205,6 @@ const styles = StyleSheet.create({
   bannerImage: {
     height: 300,
     width: 550,
-    bottom: 0,
-    left: 0,
-    position: "absolute",
   },
 intervalContainer:{
   textAlign:"center"
