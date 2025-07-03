@@ -36,4 +36,8 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+# keystores
+*.keystore
+*.jks
+
 app-example
