@@ -3,6 +3,7 @@
     "name": "in-key-mobile",
     "slug": "in-key-mobile",
     "version": "1.0.0",
+    "owner":"robotlions",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "inkeymobile",
@@ -16,7 +17,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.robotlions.inkeymobile"
     },
     "web": {
       "bundler": "metro",
