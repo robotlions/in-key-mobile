@@ -1,6 +1,6 @@
 import { Image } from "expo-image";
 import { useState } from "react";
-import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
+import { Dimensions, Pressable, StyleSheet, View } from "react-native";
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
@@ -65,13 +65,13 @@ export default function App() {
             ? "keyButton btn btn-secondary buttonActive rounded-0"
             : "keyButton btn btn-secondary rounded-0"
         }
-        onPress={(e) => {
-          setCurrentKey(Number(e.target.value));
-          setActive(Number(e.target.value));
+        onPress={() => {
+          setCurrentKey(Number(value));
+          setActive(Number(value));
           currentScaleArray = [];
         }}
       >
-        <Text>{keyName}</Text>
+        <ThemedText type="subtitle">{keyName}</ThemedText>
       </Pressable>
     );
   };
@@ -95,12 +95,12 @@ export default function App() {
         }
         onPress={(e) => {
           // setCurrentScale(Number(e.target.value));
-          setActiveScale(Number(e.target.value));
+          setActiveScale(Number(value));
           setScaleDegree(scaleDegree);
           currentScaleArray = [];
         }}
       >
-        <Text>{scaleName}</Text>
+        <ThemedText type="subtitle">{scaleName}</ThemedText>
       </Pressable>
     );
   };
@@ -118,13 +118,12 @@ export default function App() {
         />
       }
     >
-     
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Tonic Root</ThemedText>
+        <ThemedText type="title" style={{textAlign:"center", marginTop:40}}>Tonic Root</ThemedText>
       </ThemedView>
 
       <ThemedView style={styles.stepContainer}>
-        <View style={{flex:1, flexDirection:"row", justifyContent:"space-between"}}>
+        <View style={{flex:1, flexDirection:"row", justifyContent:"center", flexWrap:"wrap", gap:20}}>
           {keyArray.map((item) => (
             <KeyButton
               isActive={active === item.idNo}
@@ -137,11 +136,11 @@ export default function App() {
       </ThemedView>
 
        <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Mode</ThemedText>
+        <ThemedText type="title" style={{textAlign:"center", marginTop:40}}>Mode</ThemedText>
       </ThemedView>
 
       <ThemedView style={styles.stepContainer}>
-         <View style={{flex:1, flexDirection:"row", justifyContent:"space-between"}}>
+         <View style={{flex:1, flexDirection:"row", justifyContent:"center", flexWrap:"wrap", gap:20}}>
           {scaleArray.map((item) => (
             <ScaleButton
               isActiveScale={activeScale === item.idNo}
@@ -154,7 +153,7 @@ export default function App() {
         </View>
       </ThemedView>
 
-      <ThemedView style={styles.stepContainer}><ThemedText type="subtitle">Chords in {intToKey[currentKey]} {intToScale[activeScale]}</ThemedText></ThemedView>
+      <ThemedView style={styles.stepContainer}><ThemedText type="title" style={{textAlign:"center", marginTop:40}}>Chords in {intToKey[currentKey]} {intToScale[activeScale]}</ThemedText></ThemedView>
     <ThemedView style={{flex:1, flexDirection:"row", justifyContent:"space-between"}}>
           <ThemedText style={[styles.intervalContainer, {width:intervalWidth}]}>1</ThemedText>
           <ThemedText style={[styles.intervalContainer, {width:intervalWidth}]}>2</ThemedText>
