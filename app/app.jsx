@@ -22,7 +22,7 @@ export default function App() {
   const [scaleDegree, setScaleDegree] = useState(1);
   let currentScaleArray = [];
 
-  const intervalWidth = Dimensions.get("window").width / 8;
+  const intervalWidth = Dimensions.get("window").width / 6;
 
   function convertKey(interval) {
     let x = currentKey + interval;
@@ -64,7 +64,7 @@ export default function App() {
         id={id}
         value={value}
         type="button"
-        style={{ backgroundColor: isActive && "gray" }}
+        style={isActive ? styles.pressableActive : styles.pressableInactive}
         onPress={() => {
           setCurrentKey(Number(value));
           setActive(Number(value));
@@ -88,7 +88,7 @@ export default function App() {
         id={id}
         value={value}
         type="button"
-        style={{ backgroundColor: isActiveScale && "gray" }}
+        style={isActiveScale ? styles.pressableActive : styles.pressableInactive }
         onPress={(e) => {
           // setCurrentScale(Number(e.target.value));
           setActiveScale(Number(value));
@@ -127,7 +127,7 @@ export default function App() {
             flexDirection: "row",
             justifyContent: "center",
             flexWrap: "wrap",
-            gap: 20,
+            gap: 10,
           }}
         >
           {keyArray.map((item) => (
@@ -154,7 +154,7 @@ export default function App() {
             flexDirection: "row",
             justifyContent: "center",
             flexWrap: "wrap",
-            gap: 20,
+            gap: 10,
           }}
         >
           {scaleArray.map((item) => (
@@ -174,7 +174,7 @@ export default function App() {
           Chords in {intToKey[currentKey]} {intToScale[activeScale]}
         </ThemedText>
       </ThemedView>
-      <ThemedView
+      {/* <ThemedView
         style={{
           flex: 1,
           flexDirection: "row",
@@ -216,66 +216,78 @@ export default function App() {
         >
           7
         </ThemedText>
-      </ThemedView>
+      </ThemedView> */}
       <ThemedView
         style={{
           flex: 1,
           flexDirection: "row",
-          justifyContent: "space-between",
+          justifyContent: "center",
+          flexWrap:"wrap",
+          gap:20,
         }}
       >
+       
+        
+       
         <ThemedText
-          style={[styles.intervalContainer, { width: intervalWidth }]}
+          style={[styles.intervalContainer, { width: intervalWidth, fontSize:20 }]}
         >
-          {intToKey[currentKey]} {"\n"}
+          <ThemedText style={{fontWeight:"800", fontSize:20}}>1</ThemedText>{"\n"}
+          {intToKey[currentKey]}
           {minorSteps[convertScaleIntervals(0)]}
           {pushToCurrentScaleArray(0)}
         </ThemedText>
+      
         <ThemedText
-          style={[styles.intervalContainer, { width: intervalWidth }]}
+          style={[styles.intervalContainer, { width: intervalWidth, fontSize:20 }]}
         >
+          <ThemedText style={{fontWeight:"800", fontSize:20}}>2</ThemedText>{"\n"}
           {intToKey[convertKey(applyIntervalSteps(1))]}
-          {"\n"}
           {minorSteps[convertScaleIntervals(1)]}
           {pushToCurrentScaleArray(1)}
         </ThemedText>
         <ThemedText
-          style={[styles.intervalContainer, { width: intervalWidth }]}
+          style={[styles.intervalContainer, { width: intervalWidth, fontSize:20 }]}
         >
+           <ThemedText style={{fontWeight:"800", fontSize:20}}>3</ThemedText>{"\n"}
           {intToKey[convertKey(applyIntervalSteps(2))]}
-          {"\n"}
+          
           {minorSteps[convertScaleIntervals(2)]}
           {pushToCurrentScaleArray(2)}
         </ThemedText>
         <ThemedText
-          style={[styles.intervalContainer, { width: intervalWidth }]}
+          style={[styles.intervalContainer, { width: intervalWidth, fontSize:20 }]}
         >
+           <ThemedText style={{fontWeight:"800", fontSize:20}}>4</ThemedText>{"\n"}
           {intToKey[convertKey(applyIntervalSteps(3))]}
-          {"\n"}
+          
           {minorSteps[convertScaleIntervals(3)]}
           {pushToCurrentScaleArray(3)}
         </ThemedText>
         <ThemedText
-          style={[styles.intervalContainer, { width: intervalWidth }]}
+          style={[styles.intervalContainer, { width: intervalWidth, fontSize:20 }]}
         >
+          <ThemedText style={{fontWeight:"800", fontSize:20}}>5</ThemedText>{"\n"}
           {intToKey[convertKey(applyIntervalSteps(4))]}
-          {"\n"}
+         
           {minorSteps[convertScaleIntervals(4)]}
           {pushToCurrentScaleArray(4)}
         </ThemedText>
         <ThemedText
-          style={[styles.intervalContainer, { width: intervalWidth }]}
+         style={[styles.intervalContainer, { width: intervalWidth, fontSize:20 }]}
         >
+           <ThemedText style={{fontWeight:"800", fontSize:20}}>6</ThemedText>{"\n"}
           {intToKey[convertKey(applyIntervalSteps(5))]}
-          {"\n"}
+         
           {minorSteps[convertScaleIntervals(5)]}
           {pushToCurrentScaleArray(5)}
         </ThemedText>
         <ThemedText
-          style={[styles.intervalContainer, { width: intervalWidth }]}
+          style={[styles.intervalContainer, { width: intervalWidth, fontSize:20 }]}
         >
+           <ThemedText style={{fontWeight:"800", fontSize:20}}>7</ThemedText>{"\n"}
           {intToKey[convertKey(applyIntervalSteps(6))]}
-          {"\n"}
+          
           {minorSteps[convertScaleIntervals(6)]}
           {pushToCurrentScaleArray(6)}
         </ThemedText>
@@ -300,6 +312,19 @@ const styles = StyleSheet.create({
   },
   intervalContainer: {
     textAlign: "center",
-    backgroundColor: "gray",
+    backgroundColor: "#E08000",
+    paddingTop:10,
+    paddingBottom:10,
+    borderRadius:5,
   },
+
+  pressableActive:{
+    padding:10,
+   backgroundColor: "#E08000",
+    borderRadius:5,
+  },
+  pressableInactive:{
+    padding:10,
+    borderRadius:5,
+  }
 });
