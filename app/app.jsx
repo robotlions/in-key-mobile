@@ -1,6 +1,6 @@
 import { Image } from "expo-image";
 import { useState } from "react";
-import { Dimensions, Pressable, StyleSheet, View } from "react-native";
+import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
@@ -23,6 +23,7 @@ export default function App() {
   let currentScaleArray = [];
 
   const intervalWidth = Dimensions.get("window").width / 6;
+  const screenWidth = Dimensions.get("screen").width;
 
   function convertKey(interval) {
     let x = currentKey + interval;
@@ -71,7 +72,7 @@ export default function App() {
           currentScaleArray = [];
         }}
       >
-        <ThemedText type="subtitle">{keyName}</ThemedText>
+        <ThemedText type="default">{keyName}</ThemedText>
       </Pressable>
     );
   };
@@ -96,7 +97,7 @@ export default function App() {
           currentScaleArray = [];
         }}
       >
-        <ThemedText type="subtitle">{scaleName}</ThemedText>
+        <ThemedText type="default">{scaleName}</ThemedText>
       </Pressable>
     );
   };
@@ -110,12 +111,12 @@ export default function App() {
       headerImage={
         <Image
           source={require("@/assets/images/inKeyBanner_600.jpg")}
-          style={styles.bannerImage}
+          style={{width:screenWidth,height:screenWidth*.5}}
         />
       }
     >
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="title" style={{ textAlign: "center", marginTop: 40 }}>
+        <ThemedText type="subtitle" style={{ textAlign: "center"}}>
           Tonic Root
         </ThemedText>
       </ThemedView>
@@ -127,7 +128,7 @@ export default function App() {
             flexDirection: "row",
             justifyContent: "center",
             flexWrap: "wrap",
-            gap: 10,
+           
           }}
         >
           {keyArray.map((item) => (
@@ -142,7 +143,7 @@ export default function App() {
       </ThemedView>
 
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="title" style={{ textAlign: "center", marginTop: 40 }}>
+        <ThemedText type="subtitle" style={{ textAlign: "center"}}>
           Mode
         </ThemedText>
       </ThemedView>
@@ -154,7 +155,7 @@ export default function App() {
             flexDirection: "row",
             justifyContent: "center",
             flexWrap: "wrap",
-            gap: 10,
+           
           }}
         >
           {scaleArray.map((item) => (
@@ -170,7 +171,7 @@ export default function App() {
       </ThemedView>
 
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="title" style={{ textAlign: "center", marginTop: 40 }}>
+        <ThemedText type="subtitle" style={{ textAlign: "center" }}>
           Chords in {intToKey[currentKey]} {intToScale[activeScale]}
         </ThemedText>
       </ThemedView>
@@ -232,7 +233,7 @@ export default function App() {
         <ThemedText
           style={[styles.intervalContainer, { width: intervalWidth, fontSize:20 }]}
         >
-          <ThemedText style={{fontWeight:"800", fontSize:20}}>1</ThemedText>{"\n"}
+          <ThemedText>1</ThemedText>{"\n"}
           {intToKey[currentKey]}
           {minorSteps[convertScaleIntervals(0)]}
           {pushToCurrentScaleArray(0)}
@@ -241,7 +242,7 @@ export default function App() {
         <ThemedText
           style={[styles.intervalContainer, { width: intervalWidth, fontSize:20 }]}
         >
-          <ThemedText style={{fontWeight:"800", fontSize:20}}>2</ThemedText>{"\n"}
+          <ThemedText>2</ThemedText>{"\n"}
           {intToKey[convertKey(applyIntervalSteps(1))]}
           {minorSteps[convertScaleIntervals(1)]}
           {pushToCurrentScaleArray(1)}
@@ -249,7 +250,7 @@ export default function App() {
         <ThemedText
           style={[styles.intervalContainer, { width: intervalWidth, fontSize:20 }]}
         >
-           <ThemedText style={{fontWeight:"800", fontSize:20}}>3</ThemedText>{"\n"}
+           <ThemedText>3</ThemedText>{"\n"}
           {intToKey[convertKey(applyIntervalSteps(2))]}
           
           {minorSteps[convertScaleIntervals(2)]}
@@ -258,7 +259,7 @@ export default function App() {
         <ThemedText
           style={[styles.intervalContainer, { width: intervalWidth, fontSize:20 }]}
         >
-           <ThemedText style={{fontWeight:"800", fontSize:20}}>4</ThemedText>{"\n"}
+           <ThemedText>4</ThemedText>{"\n"}
           {intToKey[convertKey(applyIntervalSteps(3))]}
           
           {minorSteps[convertScaleIntervals(3)]}
@@ -267,7 +268,7 @@ export default function App() {
         <ThemedText
           style={[styles.intervalContainer, { width: intervalWidth, fontSize:20 }]}
         >
-          <ThemedText style={{fontWeight:"800", fontSize:20}}>5</ThemedText>{"\n"}
+          <ThemedText>5</ThemedText>{"\n"}
           {intToKey[convertKey(applyIntervalSteps(4))]}
          
           {minorSteps[convertScaleIntervals(4)]}
@@ -276,7 +277,7 @@ export default function App() {
         <ThemedText
          style={[styles.intervalContainer, { width: intervalWidth, fontSize:20 }]}
         >
-           <ThemedText style={{fontWeight:"800", fontSize:20}}>6</ThemedText>{"\n"}
+           <ThemedText>6</ThemedText>{"\n"}
           {intToKey[convertKey(applyIntervalSteps(5))]}
          
           {minorSteps[convertScaleIntervals(5)]}
@@ -285,13 +286,14 @@ export default function App() {
         <ThemedText
           style={[styles.intervalContainer, { width: intervalWidth, fontSize:20 }]}
         >
-           <ThemedText style={{fontWeight:"800", fontSize:20}}>7</ThemedText>{"\n"}
+           <ThemedText>7</ThemedText>{"\n"}
           {intToKey[convertKey(applyIntervalSteps(6))]}
           
           {minorSteps[convertScaleIntervals(6)]}
           {pushToCurrentScaleArray(6)}
         </ThemedText>
       </ThemedView>
+      <View><Text style={{height:100}}></Text></View>
     </ParallaxScrollView>
   );
 }
@@ -312,7 +314,6 @@ const styles = StyleSheet.create({
   },
   intervalContainer: {
     textAlign: "center",
-    backgroundColor: "#E08000",
     paddingTop:10,
     paddingBottom:10,
     borderRadius:5,
