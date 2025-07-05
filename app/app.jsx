@@ -6,9 +6,14 @@ import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 
-import { intervalSteps, intToKey, intToScale, keyArray, minorSteps, scaleArray } from "../data/ScaleObjects";
-
-
+import {
+  intervalSteps,
+  intToKey,
+  intToScale,
+  keyArray,
+  minorSteps,
+  scaleArray,
+} from "../data/ScaleObjects";
 
 export default function App() {
   const [currentKey, setCurrentKey] = useState(1);
@@ -17,8 +22,7 @@ export default function App() {
   const [scaleDegree, setScaleDegree] = useState(1);
   let currentScaleArray = [];
 
-  const intervalWidth = Dimensions.get("window").width/8
-
+  const intervalWidth = Dimensions.get("window").width / 8;
 
   function convertKey(interval) {
     let x = currentKey + interval;
@@ -60,11 +64,7 @@ export default function App() {
         id={id}
         value={value}
         type="button"
-        className={
-          isActive
-            ? "keyButton btn btn-secondary buttonActive rounded-0"
-            : "keyButton btn btn-secondary rounded-0"
-        }
+        style={{ backgroundColor: isActive && "gray" }}
         onPress={() => {
           setCurrentKey(Number(value));
           setActive(Number(value));
@@ -88,11 +88,7 @@ export default function App() {
         id={id}
         value={value}
         type="button"
-        className={
-          isActiveScale
-            ? "scaleButton btn btn-secondary buttonActive rounded-0"
-            : "scaleButton btn btn-secondary rounded-0"
-        }
+        style={{ backgroundColor: isActiveScale && "gray" }}
         onPress={(e) => {
           // setCurrentScale(Number(e.target.value));
           setActiveScale(Number(value));
@@ -107,7 +103,7 @@ export default function App() {
 
   const currentDate = new Date();
   let currentYear = currentDate.getFullYear();
-  
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#ffffff", dark: "#000000" }}
@@ -119,11 +115,21 @@ export default function App() {
       }
     >
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="title" style={{textAlign:"center", marginTop:40}}>Tonic Root</ThemedText>
+        <ThemedText type="title" style={{ textAlign: "center", marginTop: 40 }}>
+          Tonic Root
+        </ThemedText>
       </ThemedView>
 
       <ThemedView style={styles.stepContainer}>
-        <View style={{flex:1, flexDirection:"row", justifyContent:"center", flexWrap:"wrap", gap:20}}>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "center",
+            flexWrap: "wrap",
+            gap: 20,
+          }}
+        >
           {keyArray.map((item) => (
             <KeyButton
               isActive={active === item.idNo}
@@ -135,12 +141,22 @@ export default function App() {
         </View>
       </ThemedView>
 
-       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="title" style={{textAlign:"center", marginTop:40}}>Mode</ThemedText>
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="title" style={{ textAlign: "center", marginTop: 40 }}>
+          Mode
+        </ThemedText>
       </ThemedView>
 
       <ThemedView style={styles.stepContainer}>
-         <View style={{flex:1, flexDirection:"row", justifyContent:"center", flexWrap:"wrap", gap:20}}>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "center",
+            flexWrap: "wrap",
+            gap: 20,
+          }}
+        >
           {scaleArray.map((item) => (
             <ScaleButton
               isActiveScale={activeScale === item.idNo}
@@ -153,40 +169,117 @@ export default function App() {
         </View>
       </ThemedView>
 
-      <ThemedView style={styles.stepContainer}><ThemedText type="title" style={{textAlign:"center", marginTop:40}}>Chords in {intToKey[currentKey]} {intToScale[activeScale]}</ThemedText></ThemedView>
-    <ThemedView style={{flex:1, flexDirection:"row", justifyContent:"space-between"}}>
-          <ThemedText style={[styles.intervalContainer, {width:intervalWidth}]}>1</ThemedText>
-          <ThemedText style={[styles.intervalContainer, {width:intervalWidth}]}>2</ThemedText>
-          <ThemedText style={[styles.intervalContainer, {width:intervalWidth}]}>3</ThemedText>
-          <ThemedText style={[styles.intervalContainer, {width:intervalWidth}]}>4</ThemedText>
-          <ThemedText style={[styles.intervalContainer, {width:intervalWidth}]}>5</ThemedText>
-          <ThemedText style={[styles.intervalContainer, {width:intervalWidth}]}>6</ThemedText>
-          <ThemedText style={[styles.intervalContainer, {width:intervalWidth}]}>7</ThemedText>
-
-    </ThemedView>
-    <ThemedView style={{flex:1, flexDirection:"row", justifyContent:"space-between"}}>
-    <ThemedText style={[styles.intervalContainer, {width:intervalWidth}]}>{intToKey[currentKey]} {"\n"}
-              {minorSteps[convertScaleIntervals(0)]}
-              {pushToCurrentScaleArray(0)}</ThemedText>
-               <ThemedText style={[styles.intervalContainer, {width:intervalWidth}]}>{intToKey[convertKey(applyIntervalSteps(1))]}{"\n"}
-              {minorSteps[convertScaleIntervals(1)]}
-              {pushToCurrentScaleArray(1)}</ThemedText>
-               <ThemedText style={[styles.intervalContainer, {width:intervalWidth}]}>{intToKey[convertKey(applyIntervalSteps(2))]}{"\n"}
-              {minorSteps[convertScaleIntervals(2)]}
-              {pushToCurrentScaleArray(2)}</ThemedText>
-               <ThemedText style={[styles.intervalContainer, {width:intervalWidth}]}>{intToKey[convertKey(applyIntervalSteps(3))]}{"\n"}
-              {minorSteps[convertScaleIntervals(3)]}
-              {pushToCurrentScaleArray(3)}</ThemedText>
-               <ThemedText style={[styles.intervalContainer, {width:intervalWidth}]}>{intToKey[convertKey(applyIntervalSteps(4))]}{"\n"}
-              {minorSteps[convertScaleIntervals(4)]}
-              {pushToCurrentScaleArray(4)}</ThemedText>
-               <ThemedText style={[styles.intervalContainer, {width:intervalWidth}]}>{intToKey[convertKey(applyIntervalSteps(5))]}{"\n"}
-              {minorSteps[convertScaleIntervals(5)]}
-              {pushToCurrentScaleArray(5)}</ThemedText>
-               <ThemedText style={[styles.intervalContainer, {width:intervalWidth}]}>{intToKey[convertKey(applyIntervalSteps(6))]}{"\n"}
-              {minorSteps[convertScaleIntervals(6)]}
-              {pushToCurrentScaleArray(6)}</ThemedText>
-              </ThemedView>
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="title" style={{ textAlign: "center", marginTop: 40 }}>
+          Chords in {intToKey[currentKey]} {intToScale[activeScale]}
+        </ThemedText>
+      </ThemedView>
+      <ThemedView
+        style={{
+          flex: 1,
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        <ThemedText
+          style={[styles.intervalContainer, { width: intervalWidth }]}
+        >
+          1
+        </ThemedText>
+        <ThemedText
+          style={[styles.intervalContainer, { width: intervalWidth }]}
+        >
+          2
+        </ThemedText>
+        <ThemedText
+          style={[styles.intervalContainer, { width: intervalWidth }]}
+        >
+          3
+        </ThemedText>
+        <ThemedText
+          style={[styles.intervalContainer, { width: intervalWidth }]}
+        >
+          4
+        </ThemedText>
+        <ThemedText
+          style={[styles.intervalContainer, { width: intervalWidth }]}
+        >
+          5
+        </ThemedText>
+        <ThemedText
+          style={[styles.intervalContainer, { width: intervalWidth }]}
+        >
+          6
+        </ThemedText>
+        <ThemedText
+          style={[styles.intervalContainer, { width: intervalWidth }]}
+        >
+          7
+        </ThemedText>
+      </ThemedView>
+      <ThemedView
+        style={{
+          flex: 1,
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        <ThemedText
+          style={[styles.intervalContainer, { width: intervalWidth }]}
+        >
+          {intToKey[currentKey]} {"\n"}
+          {minorSteps[convertScaleIntervals(0)]}
+          {pushToCurrentScaleArray(0)}
+        </ThemedText>
+        <ThemedText
+          style={[styles.intervalContainer, { width: intervalWidth }]}
+        >
+          {intToKey[convertKey(applyIntervalSteps(1))]}
+          {"\n"}
+          {minorSteps[convertScaleIntervals(1)]}
+          {pushToCurrentScaleArray(1)}
+        </ThemedText>
+        <ThemedText
+          style={[styles.intervalContainer, { width: intervalWidth }]}
+        >
+          {intToKey[convertKey(applyIntervalSteps(2))]}
+          {"\n"}
+          {minorSteps[convertScaleIntervals(2)]}
+          {pushToCurrentScaleArray(2)}
+        </ThemedText>
+        <ThemedText
+          style={[styles.intervalContainer, { width: intervalWidth }]}
+        >
+          {intToKey[convertKey(applyIntervalSteps(3))]}
+          {"\n"}
+          {minorSteps[convertScaleIntervals(3)]}
+          {pushToCurrentScaleArray(3)}
+        </ThemedText>
+        <ThemedText
+          style={[styles.intervalContainer, { width: intervalWidth }]}
+        >
+          {intToKey[convertKey(applyIntervalSteps(4))]}
+          {"\n"}
+          {minorSteps[convertScaleIntervals(4)]}
+          {pushToCurrentScaleArray(4)}
+        </ThemedText>
+        <ThemedText
+          style={[styles.intervalContainer, { width: intervalWidth }]}
+        >
+          {intToKey[convertKey(applyIntervalSteps(5))]}
+          {"\n"}
+          {minorSteps[convertScaleIntervals(5)]}
+          {pushToCurrentScaleArray(5)}
+        </ThemedText>
+        <ThemedText
+          style={[styles.intervalContainer, { width: intervalWidth }]}
+        >
+          {intToKey[convertKey(applyIntervalSteps(6))]}
+          {"\n"}
+          {minorSteps[convertScaleIntervals(6)]}
+          {pushToCurrentScaleArray(6)}
+        </ThemedText>
+      </ThemedView>
     </ParallaxScrollView>
   );
 }
@@ -205,8 +298,8 @@ const styles = StyleSheet.create({
     height: 300,
     width: 550,
   },
-intervalContainer:{
-  textAlign:"center"
-}
- 
+  intervalContainer: {
+    textAlign: "center",
+    backgroundColor: "gray",
+  },
 });
