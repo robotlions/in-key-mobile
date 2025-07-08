@@ -112,6 +112,7 @@ export default function App() {
 
 
   return (
+    <View style={{flex:1}}>
     <ScrollView
     contentContainerStyle={{flexGrow:1}}
     >
@@ -120,6 +121,7 @@ export default function App() {
           style={{width: isPortrait ? screenWidth : 0, height: isPortrait ? screenWidth*.5 : 0, display: !isPortrait && "none"}}
           contentFit="cover"
         />
+        <View style={{backgroundColor:"#E08000", width:screenWidth, height:50,display: isPortrait && "none", justifyContent:"flex-end"}}><Text style={{color:"white", fontWeight:"600", fontSize:20,marginLeft:20}}>In Key Chord Finder</Text></View>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle" style={{ textAlign: "center"}}>
           Tonic Root
@@ -300,6 +302,7 @@ export default function App() {
       </ThemedView>
       <View><Text style={{height:100}}></Text></View>
     </ScrollView>
+    </View>
   );
 }
 
