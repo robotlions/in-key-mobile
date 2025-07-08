@@ -1,8 +1,13 @@
 import { Image } from "expo-image";
 import { useState } from "react";
-import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Dimensions, Pressable,
+  ScrollView,
+  StyleSheet, Text,
+  useWindowDimensions,
+  View
+} from "react-native";
 
-import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 
@@ -24,6 +29,9 @@ export default function App() {
 
   const intervalWidth = Dimensions.get("window").width / 6;
   const screenWidth = Dimensions.get("screen").width;
+
+  const {height, width} = useWindowDimensions();
+  const isPortrait = height > width;
 
   function convertKey(interval) {
     let x = currentKey + interval;
@@ -102,19 +110,16 @@ export default function App() {
     );
   };
 
-  const currentDate = new Date();
-  let currentYear = currentDate.getFullYear();
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#ffffff", dark: "#000000" }}
-      headerImage={
+    <ScrollView
+    contentContainerStyle={{flexGrow:1}}
+    >
         <Image
           source={require("@/assets/images/inKeyBanner_600.jpg")}
-          style={{width:screenWidth,height:screenWidth*.5}}
+          style={{width: isPortrait ? screenWidth : 0, height: isPortrait ? screenWidth*.5 : 0, display: !isPortrait && "none"}}
+          contentFit="cover"
         />
-      }
-    >
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle" style={{ textAlign: "center"}}>
           Tonic Root
@@ -294,7 +299,7 @@ export default function App() {
         </ThemedText>
       </ThemedView>
       <View><Text style={{height:100}}></Text></View>
-    </ParallaxScrollView>
+    </ScrollView>
   );
 }
 
@@ -305,8 +310,12 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  
+          flex: 1,
+          flexDirection: "row",
+          justifyContent: "center",
+          flexWrap:"wrap",
+          gap:20,
   },
   bannerImage: {
     height: 300,
