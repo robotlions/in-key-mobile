@@ -32,6 +32,7 @@ export default function App() {
   const { height, width } = useWindowDimensions();
   const isPortrait = height > width;
   const screenWidth = Dimensions.get("screen").width;
+  const screenHeight = Dimensions.get("screen").height;
 
   const triads = getTriads(rootNote, mode);
   const spelled = spellScale(rootNote, mode);
@@ -61,7 +62,7 @@ export default function App() {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ height, width }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <Image
           source={require("@/assets/images/inKeyBanner_600.jpg")}
@@ -363,20 +364,28 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   overlay: {
-    ...StyleSheet.absoluteFillObject,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     justifyContent: "center",
     alignItems: "center",
     zIndex: 10,
   },
   overlayBackdrop: {
-    ...StyleSheet.absoluteFillObject,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     backgroundColor: "rgba(0,0,0,0.4)",
   },
   modalCard: {
     backgroundColor: "#fff",
     borderRadius: 12,
     width: "90%",
-    maxHeight: "80%",
+    maxHeight: "75%",
     overflow: "hidden",
     elevation: 5,
     shadowColor: "#000",
