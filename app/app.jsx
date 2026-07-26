@@ -2,7 +2,6 @@ import { Image } from "expo-image";
 import { useState } from "react";
 import {
   Dimensions,
-  Modal,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -216,64 +215,62 @@ export default function App() {
         <View style={{ height: 100 }} />
       </ScrollView>
 
-      <Modal
-        visible={modalVisible}
-        animationType="slide"
-        presentationStyle="pageSheet"
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalHeader}>
-            <ThemedText type="subtitle">Change Key</ThemedText>
-            <Pressable
-              style={styles.doneBtn}
-              onPress={() => setModalVisible(false)}
-            >
-              <ThemedText
-                type="default"
-                style={{ fontFamily: "FigtreeSemiBold" }}
+      {modalVisible && (
+        <View style={styles.overlay}>
+          <Pressable style={styles.overlayBackdrop} onPress={() => setModalVisible(false)} />
+          <View style={styles.modalCard}>
+            <View style={styles.modalHeader}>
+              <ThemedText type="subtitle">Change Key</ThemedText>
+              <Pressable
+                style={styles.doneBtn}
+                onPress={() => setModalVisible(false)}
               >
-                Done
+                <ThemedText
+                  type="default"
+                  style={{ fontFamily: "FigtreeSemiBold" }}
+                >
+                  Done
+                </ThemedText>
+              </Pressable>
+            </View>
+
+            <ScrollView contentContainerStyle={styles.modalScroll}>
+              <ThemedText type="subtitle" style={{ textAlign: "center" }}>
+                Tonic Root
               </ThemedText>
-            </Pressable>
+              <View style={styles.buttonRow}>
+                {NOTES.map((_, i) => (
+                  <KeyButton key={i} index={i} />
+                ))}
+              </View>
+
+              <ThemedText
+                type="subtitle"
+                style={{ textAlign: "center", marginTop: 20 }}
+              >
+                Mode
+              </ThemedText>
+              <View style={styles.buttonRow}>
+                {MODES.map((_, i) => (
+                  <ModeButton key={i} index={i} />
+                ))}
+              </View>
+
+              <Pressable
+                style={styles.closeBtn}
+                onPress={() => setModalVisible(false)}
+              >
+                <ThemedText
+                  type="default"
+                  style={{ fontFamily: "FigtreeSemiBold" }}
+                >
+                  Close
+                </ThemedText>
+              </Pressable>
+            </ScrollView>
           </View>
-
-          <ScrollView contentContainerStyle={styles.modalScroll}>
-            <ThemedText type="subtitle" style={{ textAlign: "center" }}>
-              Tonic Root
-            </ThemedText>
-            <View style={styles.buttonRow}>
-              {NOTES.map((_, i) => (
-                <KeyButton key={i} index={i} />
-              ))}
-            </View>
-
-            <ThemedText
-              type="subtitle"
-              style={{ textAlign: "center", marginTop: 20 }}
-            >
-              Mode
-            </ThemedText>
-            <View style={styles.buttonRow}>
-              {MODES.map((_, i) => (
-                <ModeButton key={i} index={i} />
-              ))}
-            </View>
-
-            <Pressable
-              style={styles.closeBtn}
-              onPress={() => setModalVisible(false)}
-            >
-              <ThemedText
-                type="default"
-                style={{ fontFamily: "FigtreeSemiBold" }}
-              >
-                Close
-              </ThemedText>
-            </Pressable>
-          </ScrollView>
         </View>
-      </Modal>
+      )}
     </View>
   );
 }
@@ -365,8 +362,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 5,
   },
-  modalContainer: {
-    flex: 1,
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 10,
+  },
+  overlayBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0,0,0,0.4)",
+  },
+  modalCard: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    width: "90%",
+    maxHeight: "80%",
+    overflow: "hidden",
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
   },
   modalHeader: {
     flexDirection: "row",
