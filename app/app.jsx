@@ -1,343 +1,398 @@
 import { Image } from "expo-image";
 import { useState } from "react";
 import {
-  Dimensions, Pressable,
+  Dimensions,
+  Modal,
+  Pressable,
   ScrollView,
-  StyleSheet, Text,
+  StyleSheet,
+  Switch,
+  Text,
   useWindowDimensions,
-  View
+  View,
 } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 
-import {
-  intervalSteps,
-  intToKey,
-  intToScale,
-  keyArray,
-  minorSteps,
-  scaleArray,
-} from "../data/ScaleObjects";
+import { getTriads, MODES, NOTES, spellScale } from "../data/ScaleObjects";
+
+const QUALITY_BORDER = {
+  M: { borderColor: "#2850a0", borderStyle: "solid" },
+  m: { borderColor: "#888", borderStyle: "solid" },
+  dim: { borderColor: "#888", borderStyle: "dashed" },
+  aug: { borderColor: "#2850a0", borderStyle: "dotted" },
+};
 
 export default function App() {
-  const [currentKey, setCurrentKey] = useState(1);
-  const [active, setActive] = useState(1);
-  const [activeScale, setActiveScale] = useState(1);
-  const [scaleDegree, setScaleDegree] = useState(1);
-  let currentScaleArray = [];
+  const [rootNote, setRootNote] = useState(0);
+  const [mode, setMode] = useState(0);
+  const [show7th, setShow7th] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
-  const intervalWidth = Dimensions.get("window").width / 6;
+  const { height, width } = useWindowDimensions();
+  const isPortrait = height > width;
   const screenWidth = Dimensions.get("screen").width;
 
-  const {height, width} = useWindowDimensions();
-  const isPortrait = height > width;
+  const triads = getTriads(rootNote, mode);
+  const spelled = spellScale(rootNote, mode);
 
-  function convertKey(interval) {
-    let x = currentKey + interval;
-    if (x > 12) {
-      x = x - 12;
-    }
-    return x;
-  }
-
-  function convertScaleIntervals(interval) {
-    let x = scaleDegree + interval;
-    if (x > 7) {
-      x = x - 7;
-    }
-    return x;
-  }
-
-  function applyIntervalSteps(numOfDegrees) {
-    let x = 0;
-    for (let i = 0; i < numOfDegrees; i++) {
-      let sdi = scaleDegree + i;
-      if (sdi > 7) {
-        sdi = sdi - 7;
-      }
-      x = x + intervalSteps[sdi];
-    }
-    return x;
-  }
-
-  function pushToCurrentScaleArray(degree) {
-    currentScaleArray.push(
-      String(intToKey[convertKey(applyIntervalSteps(degree))])
-    );
-  }
-
-  const KeyButton = ({ id, keyName, isActive, value }) => {
+  const KeyButton = ({ index }) => {
+    const isActive = rootNote === index;
     return (
       <Pressable
-        id={id}
-        value={value}
-        type="button"
         style={isActive ? styles.pressableActive : styles.pressableInactive}
-        onPress={() => {
-          setCurrentKey(Number(value));
-          setActive(Number(value));
-          currentScaleArray = [];
-        }}
+        onPress={() => setRootNote(index)}
       >
-        <ThemedText type="default">{keyName}</ThemedText>
+        <ThemedText type="default">{NOTES[index]}</ThemedText>
       </Pressable>
     );
   };
 
-  const ScaleButton = ({
-    id,
-    scaleName,
-    isActiveScale,
-    value,
-    scaleDegree,
-  }) => {
+  const ModeButton = ({ index }) => {
+    const isActive = mode === index;
     return (
       <Pressable
-        id={id}
-        value={value}
-        type="button"
-        style={isActiveScale ? styles.pressableActive : styles.pressableInactive }
-        onPress={(e) => {
-          // setCurrentScale(Number(e.target.value));
-          setActiveScale(Number(value));
-          setScaleDegree(scaleDegree);
-          currentScaleArray = [];
-        }}
+        style={isActive ? styles.pressableActive : styles.pressableInactive}
+        onPress={() => setMode(index)}
       >
-        <ThemedText type="default">{scaleName}</ThemedText>
+        <ThemedText type="default">{MODES[index].name}</ThemedText>
       </Pressable>
     );
   };
-
 
   return (
-    <View style={{flex:1}}>
-    <ScrollView
-    contentContainerStyle={{flexGrow:1}}
-    >
+    <View style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <Image
           source={require("@/assets/images/inKeyBanner_600.jpg")}
-          style={{width: isPortrait ? screenWidth : 0, height: isPortrait ? screenWidth*.5 : 0, display: !isPortrait && "none"}}
+          style={{
+            width: isPortrait ? screenWidth : 0,
+            height: isPortrait ? screenWidth * 0.5 : 0,
+            display: !isPortrait && "none",
+          }}
           contentFit="cover"
         />
-        <View style={{backgroundColor:"#E08000", width:screenWidth, height:50,display: isPortrait && "none", justifyContent:"flex-end"}}><Text style={{color:"white", fontWeight:"600", fontSize:20,marginLeft:20}}>In Key Chord Finder</Text></View>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle" style={{ textAlign: "center"}}>
-          Tonic Root
-        </ThemedText>
-      </ThemedView>
-
-      <ThemedView style={styles.stepContainer}>
         <View
           style={{
-            flex: 1,
-            flexDirection: "row",
-            justifyContent: "center",
-            flexWrap: "wrap",
-           
+            backgroundColor: "#E08000",
+            width: screenWidth,
+            height: 50,
+            display: isPortrait && "none",
+            justifyContent: "flex-end",
           }}
         >
-          {keyArray.map((item) => (
-            <KeyButton
-              isActive={active === item.idNo}
-              keyName={item.keyName}
-              value={item.idNo}
-              key={item.idNo}
-            />
-          ))}
+          <Text
+            style={{
+              color: "white",
+              fontFamily: "FigtreeSemiBold",
+              fontSize: 20,
+              marginLeft: 20,
+            }}
+          >
+            In Key Chord Finder
+          </Text>
         </View>
-      </ThemedView>
 
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle" style={{ textAlign: "center"}}>
-          Mode
-        </ThemedText>
-      </ThemedView>
-
-      <ThemedView style={styles.stepContainer}>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: "row",
-            justifyContent: "center",
-            flexWrap: "wrap",
-           
-          }}
-        >
-          {scaleArray.map((item) => (
-            <ScaleButton
-              isActiveScale={activeScale === item.idNo}
-              scaleName={item.scaleName}
-              value={item.idNo}
-              scaleDegree={item.scaleDegree}
-              key={item.idNo}
-            />
-          ))}
+        <View style={styles.changeKeyRow}>
+          <Pressable
+            style={styles.changeKeyBtn}
+            onPress={() => setModalVisible(true)}
+          >
+            <ThemedText type="default">Change Key</ThemedText>
+          </Pressable>
         </View>
-      </ThemedView>
 
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle" style={{ textAlign: "center" }}>
-          Chords in {intToKey[currentKey]} {intToScale[activeScale]}
-        </ThemedText>
-      </ThemedView>
-      {/* <ThemedView
-        style={{
-          flex: 1,
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
+        <ThemedView style={styles.stepContainer}>
+          <ThemedText type="subtitle" style={{ textAlign: "center" }}>
+            Notes in {NOTES[rootNote]} {MODES[mode].name}
+          </ThemedText>
+        </ThemedView>
+
+        <ThemedView style={styles.stepContainer}>
+          <View style={styles.buttonRow}>
+            {spelled.map((note, i) => (
+              <ThemedText
+                key={i}
+                style={{
+                  fontFamily: "FigtreeRegular",
+                  fontSize: 18,
+                  paddingHorizontal: 8,
+                }}
+              >
+                {note}
+              </ThemedText>
+            ))}
+          </View>
+        </ThemedView>
+
+        <ThemedView style={styles.stepContainer}>
+          <ThemedText type="subtitle" style={{ textAlign: "center" }}>
+            Triads in {NOTES[rootNote]} {MODES[mode].name}
+          </ThemedText>
+        </ThemedView>
+
+        <ThemedView style={styles.triadsContainer}>
+          {triads.map((triad) => {
+            const border = QUALITY_BORDER[triad.quality];
+            return (
+              <View
+                key={triad.numeral}
+                style={[
+                  styles.triadCard,
+                  {
+                    borderColor: border.borderColor,
+                    borderStyle: border.borderStyle,
+                    borderWidth: 2,
+                  },
+                ]}
+              >
+                <ThemedText style={styles.triadNumeral}>
+                  {triad.numeral}
+                </ThemedText>
+                <ThemedText style={styles.triadName}>{triad.name}</ThemedText>
+                <ThemedText style={styles.triadNotes}>
+                  {triad.notes.join(" - ")}
+                  {show7th && (
+                    <Text style={{ color: "#a04040" }}> - {triad.seventh}</Text>
+                  )}
+                </ThemedText>
+              </View>
+            );
+          })}
+        </ThemedView>
+        <View style={styles.toggleRow}>
+          <ThemedText style={{ marginRight: 8 }}>Show 7th</ThemedText>
+          <Switch value={show7th} onValueChange={setShow7th} />
+        </View>
+
+        <View style={styles.legendRow}>
+          <View style={styles.legendItem}>
+            <View
+              style={[
+                styles.legendSwatch,
+                {
+                  borderColor: "#2850a0",
+                  borderWidth: 2,
+                  borderStyle: "solid",
+                },
+              ]}
+            />
+            <ThemedText style={styles.legendLabel}>Major</ThemedText>
+          </View>
+          <View style={styles.legendItem}>
+            <View
+              style={[
+                styles.legendSwatch,
+                { borderColor: "#888", borderWidth: 2, borderStyle: "solid" },
+              ]}
+            />
+            <ThemedText style={styles.legendLabel}>Minor</ThemedText>
+          </View>
+          <View style={styles.legendItem}>
+            <View
+              style={[
+                styles.legendSwatch,
+                { borderColor: "#888", borderWidth: 2, borderStyle: "dashed" },
+              ]}
+            />
+            <ThemedText style={styles.legendLabel}>Diminished</ThemedText>
+          </View>
+          <View style={styles.legendItem}>
+            <View
+              style={[
+                styles.legendSwatch,
+                {
+                  borderColor: "#2850a0",
+                  borderWidth: 2,
+                  borderStyle: "dotted",
+                },
+              ]}
+            />
+            <ThemedText style={styles.legendLabel}>Augmented</ThemedText>
+          </View>
+        </View>
+
+        <View style={{ height: 100 }} />
+      </ScrollView>
+
+      <Modal
+        visible={modalVisible}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => setModalVisible(false)}
       >
-        <ThemedText
-          style={[styles.intervalContainer, { width: intervalWidth }]}
-        >
-          1
-        </ThemedText>
-        <ThemedText
-          style={[styles.intervalContainer, { width: intervalWidth }]}
-        >
-          2
-        </ThemedText>
-        <ThemedText
-          style={[styles.intervalContainer, { width: intervalWidth }]}
-        >
-          3
-        </ThemedText>
-        <ThemedText
-          style={[styles.intervalContainer, { width: intervalWidth }]}
-        >
-          4
-        </ThemedText>
-        <ThemedText
-          style={[styles.intervalContainer, { width: intervalWidth }]}
-        >
-          5
-        </ThemedText>
-        <ThemedText
-          style={[styles.intervalContainer, { width: intervalWidth }]}
-        >
-          6
-        </ThemedText>
-        <ThemedText
-          style={[styles.intervalContainer, { width: intervalWidth }]}
-        >
-          7
-        </ThemedText>
-      </ThemedView> */}
-      <ThemedView
-        style={{
-          flex: 1,
-          flexDirection: "row",
-          justifyContent: "center",
-          flexWrap:"wrap",
-          gap:20,
-        }}
-      >
-       
-        
-       
-        <ThemedText
-          style={[styles.intervalContainer, { width: intervalWidth, fontSize:20 }]}
-        >
-          <ThemedText>1</ThemedText>{"\n"}
-          {intToKey[currentKey]}
-          {minorSteps[convertScaleIntervals(0)]}
-          {pushToCurrentScaleArray(0)}
-        </ThemedText>
-      
-        <ThemedText
-          style={[styles.intervalContainer, { width: intervalWidth, fontSize:20 }]}
-        >
-          <ThemedText>2</ThemedText>{"\n"}
-          {intToKey[convertKey(applyIntervalSteps(1))]}
-          {minorSteps[convertScaleIntervals(1)]}
-          {pushToCurrentScaleArray(1)}
-        </ThemedText>
-        <ThemedText
-          style={[styles.intervalContainer, { width: intervalWidth, fontSize:20 }]}
-        >
-           <ThemedText>3</ThemedText>{"\n"}
-          {intToKey[convertKey(applyIntervalSteps(2))]}
-          
-          {minorSteps[convertScaleIntervals(2)]}
-          {pushToCurrentScaleArray(2)}
-        </ThemedText>
-        <ThemedText
-          style={[styles.intervalContainer, { width: intervalWidth, fontSize:20 }]}
-        >
-           <ThemedText>4</ThemedText>{"\n"}
-          {intToKey[convertKey(applyIntervalSteps(3))]}
-          
-          {minorSteps[convertScaleIntervals(3)]}
-          {pushToCurrentScaleArray(3)}
-        </ThemedText>
-        <ThemedText
-          style={[styles.intervalContainer, { width: intervalWidth, fontSize:20 }]}
-        >
-          <ThemedText>5</ThemedText>{"\n"}
-          {intToKey[convertKey(applyIntervalSteps(4))]}
-         
-          {minorSteps[convertScaleIntervals(4)]}
-          {pushToCurrentScaleArray(4)}
-        </ThemedText>
-        <ThemedText
-         style={[styles.intervalContainer, { width: intervalWidth, fontSize:20 }]}
-        >
-           <ThemedText>6</ThemedText>{"\n"}
-          {intToKey[convertKey(applyIntervalSteps(5))]}
-         
-          {minorSteps[convertScaleIntervals(5)]}
-          {pushToCurrentScaleArray(5)}
-        </ThemedText>
-        <ThemedText
-          style={[styles.intervalContainer, { width: intervalWidth, fontSize:20 }]}
-        >
-           <ThemedText>7</ThemedText>{"\n"}
-          {intToKey[convertKey(applyIntervalSteps(6))]}
-          
-          {minorSteps[convertScaleIntervals(6)]}
-          {pushToCurrentScaleArray(6)}
-        </ThemedText>
-      </ThemedView>
-      <View><Text style={{height:100}}></Text></View>
-    </ScrollView>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalHeader}>
+            <ThemedText type="subtitle">Change Key</ThemedText>
+            <Pressable
+              style={styles.doneBtn}
+              onPress={() => setModalVisible(false)}
+            >
+              <ThemedText
+                type="default"
+                style={{ fontFamily: "FigtreeSemiBold" }}
+              >
+                Done
+              </ThemedText>
+            </Pressable>
+          </View>
+
+          <ScrollView contentContainerStyle={styles.modalScroll}>
+            <ThemedText type="subtitle" style={{ textAlign: "center" }}>
+              Tonic Root
+            </ThemedText>
+            <View style={styles.buttonRow}>
+              {NOTES.map((_, i) => (
+                <KeyButton key={i} index={i} />
+              ))}
+            </View>
+
+            <ThemedText
+              type="subtitle"
+              style={{ textAlign: "center", marginTop: 20 }}
+            >
+              Mode
+            </ThemedText>
+            <View style={styles.buttonRow}>
+              {MODES.map((_, i) => (
+                <ModeButton key={i} index={i} />
+              ))}
+            </View>
+
+            <Pressable
+              style={styles.closeBtn}
+              onPress={() => setModalVisible(false)}
+            >
+              <ThemedText
+                type="default"
+                style={{ fontFamily: "FigtreeSemiBold" }}
+              >
+                Close
+              </ThemedText>
+            </Pressable>
+          </ScrollView>
+        </View>
+      </Modal>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  stepContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    gap: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  buttonRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    gap: 10,
+  },
+  pressableActive: {
+    padding: 10,
+    backgroundColor: "#E08000",
+    borderRadius: 5,
+  },
+  pressableInactive: {
+    padding: 10,
+    borderRadius: 5,
+  },
+  toggleRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 8,
+  },
+  triadsContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    gap: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+  },
+  triadCard: {
+    alignItems: "center",
+    borderRadius: 6,
+    padding: 10,
+    minWidth: 100,
+    maxWidth: 140,
+  },
+  triadNumeral: {
+    fontSize: 14,
+    marginBottom: 2,
+  },
+  triadName: {
+    fontFamily: "FigtreeSemiBold",
+    fontSize: 18,
+    marginBottom: 4,
+  },
+  triadNotes: {
+    fontSize: 12,
+    textAlign: "center",
+  },
+  legendRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    gap: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+  },
+  legendItem: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
+    gap: 4,
   },
-  stepContainer: {
-  
-          flex: 1,
-          flexDirection: "row",
-          justifyContent: "center",
-          flexWrap:"wrap",
-          gap:20,
+  legendSwatch: {
+    width: 14,
+    height: 14,
+    borderRadius: 3,
   },
-  bannerImage: {
-    height: 300,
-    width: 550,
+  changeKeyRow: {
+    alignItems: "center",
+    paddingVertical: 10,
   },
-  intervalContainer: {
-    textAlign: "center",
-    paddingTop:10,
-    paddingBottom:10,
-    borderRadius:5,
+  changeKeyBtn: {
+    backgroundColor: "#E08000",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
   },
-
-  pressableActive:{
-    padding:10,
-   backgroundColor: "#E08000",
-    borderRadius:5,
+  modalContainer: {
+    flex: 1,
   },
-  pressableInactive:{
-    padding:10,
-    borderRadius:5,
-  }
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  doneBtn: {
+    padding: 10,
+  },
+  modalScroll: {
+    padding: 20,
+    gap: 10,
+  },
+  closeBtn: {
+    backgroundColor: "#E08000",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    alignSelf: "center",
+    marginTop: 20,
+  },
+  legendLabel: {
+    fontSize: 12,
+  },
 });

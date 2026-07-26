@@ -35,24 +35,26 @@ export function ThemedText({
 
 const styles = StyleSheet.create({
   default: {
+    fontFamily: 'FigtreeRegular',
     fontSize: 16,
     lineHeight: 24,
   },
   defaultSemiBold: {
+    fontFamily: 'FigtreeSemiBold',
     fontSize: 16,
     lineHeight: 24,
-    fontWeight: '600',
   },
   title: {
+    fontFamily: 'FigtreeBold',
     fontSize: 32,
-    fontWeight: 'bold',
     lineHeight: 32,
   },
   subtitle: {
+    fontFamily: 'FigtreeBold',
     fontSize: 20,
-    fontWeight: 'bold',
   },
   link: {
+    fontFamily: 'FigtreeRegular',
     lineHeight: 30,
     fontSize: 16,
     color: '#0a7ea4',

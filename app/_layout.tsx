@@ -20,6 +20,10 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    FigtreeRegular: require("../assets/fonts/Figtree-Regular.ttf"),
+    FigtreeMedium: require("../assets/fonts/Figtree-Medium.ttf"),
+    FigtreeSemiBold: require("../assets/fonts/Figtree-SemiBold.ttf"),
+    FigtreeBold: require("../assets/fonts/Figtree-Bold.ttf"),
   });
 
   if (!loaded) {

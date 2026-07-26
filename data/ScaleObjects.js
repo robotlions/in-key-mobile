@@ -1,126 +1,114 @@
+export const NOTES = [
+  "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B",
+];
 
-export const keyArray = [
-    { idNo: 1, keyName: "C" },
-    { idNo: 2, keyName: "C#/Db" },
-    { idNo: 3, keyName: "D" },
-    { idNo: 4, keyName: "D#/Eb" },
-    { idNo: 5, keyName: "E" },
-    { idNo: 6, keyName: "F" },
-    { idNo: 7, keyName: "F#/Gb" },
-    { idNo: 8, keyName: "G" },
-    { idNo: 9, keyName: "G#/Ab" },
-    { idNo: 10, keyName: "A" },
-    { idNo: 11, keyName: "A#/Bb" },
-    { idNo: 12, keyName: "B" },
-  ];
+export const MODES = [
+  {
+    name: "Major (Ionian)",
+    intervals: [2, 2, 1, 2, 2, 2, 1],
+    qualities: ["M", "m", "m", "M", "M", "m", "dim"],
+  },
+  {
+    name: "Dorian",
+    intervals: [2, 1, 2, 2, 2, 1, 2],
+    qualities: ["m", "dim", "M", "M", "m", "m", "M"],
+  },
+  {
+    name: "Phrygian",
+    intervals: [1, 2, 2, 2, 1, 2, 2],
+    qualities: ["dim", "M", "m", "m", "m", "M", "M"],
+  },
+  {
+    name: "Lydian",
+    intervals: [2, 2, 2, 1, 2, 2, 1],
+    qualities: ["M", "M", "m", "dim", "M", "m", "m"],
+  },
+  {
+    name: "Mixolydian",
+    intervals: [2, 2, 1, 2, 2, 1, 2],
+    qualities: ["M", "m", "dim", "M", "m", "m", "M"],
+  },
+  {
+    name: "Minor (Aeolian)",
+    intervals: [2, 1, 2, 2, 1, 2, 2],
+    qualities: ["m", "dim", "M", "m", "m", "M", "M"],
+  },
+  {
+    name: "Locrian",
+    intervals: [1, 2, 2, 1, 2, 2, 2],
+    qualities: ["dim", "M", "m", "m", "M", "M", "m"],
+  },
+  {
+    name: "Harmonic Minor",
+    intervals: [2, 1, 2, 2, 1, 3, 1],
+    qualities: ["m", "dim", "aug", "m", "M", "M", "dim"],
+  },
+];
 
-  // export const keyArray = [
-  //   { idNo: 1, keyName: "C" },
-  //   { idNo: 2, keyName: "Db" },
-  //   { idNo: 3, keyName: "D" },
-  //   { idNo: 4, keyName: "Eb" },
-  //   { idNo: 5, keyName: "E" },
-  //   { idNo: 6, keyName: "F" },
-  //   { idNo: 7, keyName: "F#" },
-  //   { idNo: 8, keyName: "G" },
-  //   { idNo: 9, keyName: "Ab" },
-  //   { idNo: 10, keyName: "A" },
-  //   { idNo: 11, keyName: "Bb" },
-  //   { idNo: 12, keyName: "B" },
-  // ];
+export const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII"];
 
-  export const intToKey = {
-    1: "C",
-    2: "C#/Db",
-    3: "D",
-    4: "D#/Eb",
-    5: "E",
-    6: "F",
-    7: "F#/Gb",
-    8: "G",
-    9: "G#/Ab",
-    10: "A",
-    11: "A#/Bb",
-    12: "B",
-  };
+export const QUALITY_SUFFIX = { M: "", m: "m", dim: "dim", aug: "aug" };
+export const QUALITY_SYMBOL = { M: "maj", m: "m", dim: "dim", aug: "aug" };
 
-  export const intToScale = {
-    1: "Major (Ionian)",
-    2: "Dorian",
-    3: "Phrygian",
-    4: "Lydian",
-    5: "Mixolydian",
-    6: "Minor (Aeolian)",
-    7: "Locrian",
-    8: "Harmonic Minor",
-    
-  };
+const LETTER_NAMES = ["C", "D", "E", "F", "G", "A", "B"];
+const LETTER_NATURAL = [0, 2, 4, 5, 7, 9, 11];
+const CHROMATIC_TO_LETTER = [0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6];
 
-  export const scaleArray = [
-    {
-        idNo: 1,
-        scaleName: "Major (Ionian)",
-        scaleDegree: 1,
-
-    },
-    {
-        idNo: 2,
-        scaleName: "Dorian",
-        scaleDegree: 2,
-
-    },
-    {
-        idNo: 3,
-        scaleName: "Phrygian",
-        scaleDegree: 3,
-
-    },
-    {
-        idNo: 4,
-        scaleName: "Lydian",
-        scaleDegree: 4,
-
-    },
-    {
-        idNo: 5,
-        scaleName: "Mixolydian",
-        scaleDegree: 5,
-
-    },
-    {
-        idNo: 6,
-        scaleName: "Minor (Aeolian)",
-        scaleDegree: 6,
-    },
-    {
-        idNo: 7,
-        scaleName: "Locrian",
-        scaleDegree: 7,
-
-    },
-   
-  ]
-
-  export const intervalSteps = {
-    1: 2,
-    2: 2,
-    3: 1,
-    4: 2,
-    5: 2,
-    6: 2,
-    7: 1,
-
+export function getScaleNotes(rootNote, mode) {
+  const intervals = MODES[mode].intervals;
+  const notes = [rootNote];
+  let current = rootNote;
+  for (let i = 0; i < 6; i++) {
+    current = (current + intervals[i]) % 12;
+    notes.push(current);
   }
+  return notes;
+}
 
-  export const minorSteps = {
-    1: "",
-    2: "min",
-    3: "min",
-    4: "",
-    5: "",
-    6: "min",
-    7: "dim",
+export function spellNote(chromaticIndex, letterIndex) {
+  const letter = LETTER_NAMES[letterIndex];
+  const natural = LETTER_NATURAL[letterIndex];
+  const diff = (chromaticIndex - natural + 12) % 12;
+  if (diff === 1) return letter + "#";
+  if (diff === 11) return letter + "b";
+  return letter;
+}
 
-  }
-    
-  
+export function spellScale(rootNote, mode) {
+  const rootLetter = CHROMATIC_TO_LETTER[rootNote];
+  const scaleNotes = getScaleNotes(rootNote, mode);
+  return scaleNotes.map((note, i) => spellNote(note, (rootLetter + i) % 7));
+}
+
+export function getTriads(rootNote, mode) {
+  const qualities = MODES[mode].qualities;
+  const scaleNotes = getScaleNotes(rootNote, mode);
+  const spelled = spellScale(rootNote, mode);
+
+  return scaleNotes.map((note, i) => {
+    const third = (i + 2) % 7;
+    const fifth = (i + 4) % 7;
+    const quality = qualities[i];
+    const roman =
+      quality === "M" || quality === "dim" || quality === "aug"
+        ? ROMAN[i]
+        : ROMAN[i].toLowerCase();
+
+    const seventh = (i + 6) % 7;
+
+    return {
+      numeral:
+        quality === "dim"
+          ? roman + "\u00B0"
+          : quality === "aug"
+            ? roman + "+"
+            : roman,
+      root: spelled[i],
+      name: spelled[i] + QUALITY_SUFFIX[quality],
+      notes: [spelled[i], spelled[third], spelled[fifth]],
+      seventh: spelled[seventh],
+      quality,
+      qualityLabel: QUALITY_SYMBOL[quality],
+    };
+  });
+}
