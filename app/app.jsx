@@ -11,6 +11,7 @@ import {
   View,
 } from "react-native";
 
+import PianoChord from "@/components/PianoChord";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 
@@ -28,6 +29,8 @@ export default function App() {
   const [mode, setMode] = useState(0);
   const [show7th, setShow7th] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [pianoVisible, setPianoVisible] = useState(false);
+  const [selectedTriad, setSelectedTriad] = useState(null);
 
   const { height, width } = useWindowDimensions();
   const isPortrait = height > width;
@@ -136,8 +139,12 @@ export default function App() {
           {triads.map((triad) => {
             const border = QUALITY_BORDER[triad.quality];
             return (
-              <View
+              <Pressable
                 key={triad.numeral}
+                onPress={() => {
+                  setSelectedTriad(triad);
+                  setPianoVisible(true);
+                }}
                 style={[
                   styles.triadCard,
                   {
@@ -150,14 +157,16 @@ export default function App() {
                 <ThemedText style={styles.triadNumeral}>
                   {triad.numeral}
                 </ThemedText>
-                <ThemedText style={styles.triadName}>{triad.name}</ThemedText>
+                <ThemedText style={styles.triadName}>
+                  {show7th ? triad.name7 : triad.name}
+                </ThemedText>
                 <ThemedText style={styles.triadNotes}>
                   {triad.notes.join(" - ")}
                   {show7th && (
                     <Text style={{ color: "#a04040" }}> - {triad.seventh}</Text>
                   )}
                 </ThemedText>
-              </View>
+              </Pressable>
             );
           })}
         </ThemedView>
@@ -213,8 +222,63 @@ export default function App() {
           </View>
         </View>
 
+        <View style={styles.pianoHintRow}>
+          <ThemedText
+            style={{ fontFamily: "FigtreeRegular", fontStyle: "italic" }}
+          >
+            {selectedTriad !== null
+              ? `Showing piano for ${
+                  show7th ? selectedTriad.name7 : selectedTriad.name
+                }.`
+              : "Click on a triad to see it on piano."}
+          </ThemedText>
+        </View>
+
         <View style={{ height: 100 }} />
       </ScrollView>
+
+      {pianoVisible && selectedTriad !== null && (
+        <View style={styles.overlay}>
+          <Pressable
+            style={styles.overlayBackdrop}
+            onPress={() => {
+              setSelectedTriad(null);
+              setPianoVisible(false);
+            }}
+          />
+          <View style={styles.modalCard}>
+            <View style={styles.modalHeader}>
+              <ThemedText type="subtitle" style={{ flex: 1 }}>
+                {show7th ? selectedTriad.name7 : selectedTriad.name} -{" "}
+                {selectedTriad.notes.join(" - ")}
+                {show7th && (
+                  <Text style={{ color: "#a04040" }}>
+                    {" "}
+                    - {selectedTriad.seventh}
+                  </Text>
+                )}
+              </ThemedText>
+              <Pressable
+                style={styles.doneBtn}
+                onPress={() => {
+                  setSelectedTriad(null);
+                  setPianoVisible(false);
+                }}
+              >
+                <ThemedText
+                  type="default"
+                  style={{ fontFamily: "FigtreeSemiBold" }}
+                >
+                  Close
+                </ThemedText>
+              </Pressable>
+            </View>
+            <View style={styles.modalBody}>
+              <PianoChord triad={selectedTriad} show7th={show7th} />
+            </View>
+          </View>
+        </View>
+      )}
 
       {modalVisible && (
         <View style={styles.overlay}>
@@ -419,5 +483,14 @@ const styles = StyleSheet.create({
   },
   legendLabel: {
     fontSize: 12,
+  },
+  pianoHintRow: {
+    alignItems: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
+  modalBody: {
+    alignItems: "center",
+    padding: 20,
   },
 });
