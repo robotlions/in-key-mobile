@@ -48,10 +48,12 @@ export const MODES = [
 export const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII"];
 
 export const QUALITY_SUFFIX = { M: "", m: "m", dim: "dim", aug: "aug" };
+export const QUALITY_SUFFIX_7 = { M: "7", m: "m7", dim: "dim7", aug: "aug7" };
 export const QUALITY_SYMBOL = { M: "maj", m: "m", dim: "dim", aug: "aug" };
 
 const LETTER_NAMES = ["C", "D", "E", "F", "G", "A", "B"];
 const LETTER_NATURAL = [0, 2, 4, 5, 7, 9, 11];
+const LETTER_INDEX = { C: 0, D: 1, E: 2, F: 3, G: 4, A: 5, B: 6 };
 const CHROMATIC_TO_LETTER = [0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6];
 
 export function getScaleNotes(rootNote, mode) {
@@ -80,10 +82,22 @@ export function spellScale(rootNote, mode) {
   return scaleNotes.map((note, i) => spellNote(note, (rootLetter + i) % 7));
 }
 
+export function noteToChromatic(spelled) {
+  const letter = spelled[0];
+  const accidental = spelled.slice(1);
+  let chrom = LETTER_NATURAL[LETTER_INDEX[letter]];
+  if (accidental === "#") chrom = (chrom + 1) % 12;
+  else if (accidental === "b") chrom = (chrom + 11) % 12;
+  else if (accidental === "##" || accidental === "x") chrom = (chrom + 2) % 12;
+  else if (accidental === "bb") chrom = (chrom + 10) % 12;
+  return chrom;
+}
+
 export function getTriads(rootNote, mode) {
   const qualities = MODES[mode].qualities;
   const scaleNotes = getScaleNotes(rootNote, mode);
   const spelled = spellScale(rootNote, mode);
+  const rootLetter = CHROMATIC_TO_LETTER[rootNote];
 
   return scaleNotes.map((note, i) => {
     const third = (i + 2) % 7;
@@ -94,7 +108,10 @@ export function getTriads(rootNote, mode) {
         ? ROMAN[i]
         : ROMAN[i].toLowerCase();
 
-    const seventh = (i + 6) % 7;
+    const seventhLetter = (rootLetter + i + 6) % 7;
+    const seventhSemitone = quality === "dim" ? 9 : 10;
+    const seventhChrom = (note + seventhSemitone) % 12;
+    const seventh = spellNote(seventhChrom, seventhLetter);
 
     return {
       numeral:
@@ -105,8 +122,9 @@ export function getTriads(rootNote, mode) {
             : roman,
       root: spelled[i],
       name: spelled[i] + QUALITY_SUFFIX[quality],
+      name7: spelled[i] + QUALITY_SUFFIX_7[quality],
       notes: [spelled[i], spelled[third], spelled[fifth]],
-      seventh: spelled[seventh],
+      seventh,
       quality,
       qualityLabel: QUALITY_SYMBOL[quality],
     };
