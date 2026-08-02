@@ -1,7 +1,7 @@
 # In Key - Chords and Modes
 
 <p align="center">
-  <img src="assets/readme/inKeyTitleCard.png" alt="In Key" width="600" />
+  <img src="assets/readme/inKeyTitleCard.png" alt="In Key" width="400" />
 </p>
 
 In Key is a React Native (Expo) app that determines the diatonic notes and chords in a chosen key and mode. Select any root note and one of eight modes to instantly see the notes of the scale, the triads built on each scale degree, and an on-screen piano keyboard showing exactly which keys are in the chord.
@@ -16,10 +16,6 @@ The scales are determined programmatically, using the major scale intervals as a
 - **Triads per degree** - the chord built on every scale degree, labeled with Roman numerals (e.g. I, ii, iii, IV, V, vi, vii°) and color-coded by quality: major, minor, diminished, and augmented.
 - **Seventh chords** - toggle "Show 7th" to display dominant seventh chords for each degree.
 - **Piano view** - tap any triad to see it rendered on a piano keyboard, with the chord tones highlighted and labeled.
-
-<p align="center">
-  <img src="assets/readme/inKeyFeatureImage1.png" alt="In Key feature screenshot" width="400" />
-</p>
 
 ## Screenshots
 
