@@ -21,6 +21,6 @@ The scales are determined programmatically, using the major scale intervals as a
 
 <p align="center">
   <img src="assets/readme/Screenshot_1785635015.png" alt="In Key screenshot 1" width="300" />
-  <img src="assets/readme/Screenshot_1785635475.png" alt="In Key screenshot 2" width="300" />
+  <img src="assets/readme/screenshot_keyboard.png" alt="In Key keyboard screenshot" width="300" />
   <img src="assets/readme/Screenshot_1785635479.png" alt="In Key screenshot 3" width="300" />
 </p>
